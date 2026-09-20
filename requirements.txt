@@ -1,2 +1,4 @@
 groq
 flask
+dotenv
+osadd
