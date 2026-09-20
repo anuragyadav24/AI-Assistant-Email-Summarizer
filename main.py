@@ -60,5 +60,10 @@ def summarize():
     return jsonify({"summary": summary}), 200  
 
 
+@app.route("/health", methods=["GET"])
+def health():
+    return jsonify({"status": "ok"}), 200
+
+
 if __name__ == "__main__":
     app.run(denug=True)
