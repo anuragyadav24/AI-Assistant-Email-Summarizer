@@ -1,4 +1,3 @@
-groq
 flask
-dotenv
-osadd
+groq
+python-dotenv
