@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Personal Assistant</title>
+    <link rel="stylesheet"  href="{{url_for('static' , filename='style.css')}}">
+</head>
+<body>
+    <h1 class = "main-heading">AI Personal Assitant</h1>
+    <div class="container">
+        <h2>Ask Anything</h2>
+        <form id="askform">
+            <input type="text" name="Query" placeholder="Ask Your Query" required>
+            <button type="submit">Ask</button>
+        </form>
+        <p class="ask-loading" style="display: none;">Processing...</p>
+        <p id="answer"></p>
+        <br>
+        <hr>
+        <br>
+        <h2>Email Summarizer</h2>
+        <form id="emailForm">
+            <textarea type="text" name="Email" placeholder="Enter your Email" required></textarea>
+            <button type="submit">Summarize</button>
+        </form>
+        <p class="email-loading" style="display: none;">Processing Email...</p>
+        <p id="summary"></p>
+    </div>
+
+    <script>
+      document.getElementById("askform").onsubmit = async (e) => {
+  e.preventDefault();
+
+  const formData = new FormData(e.target);
+  const loading = document.querySelector(".ask-loading");
+  const answerEl = document.getElementById("answer");
+
+  loading.style.display = "block";
+  answerEl.innerText = "";
+
+  try {
+    const res = await fetch("/ask", {
+      method: "POST",
+      body: formData
+    });
+
+    if (!res.ok) {
+      throw new Error(`Server error: ${res.status}`);
+    }
+
+    const data = await res.json();
+    answerEl.innerText = data.response;
+  } catch (err) {
+    answerEl.innerText = `Error: ${err.message}`;
+  } finally {
+    loading.style.display = "none";
+  }
+};
+
+document.getElementById("emailForm").onsubmit = async (e) => {
+  e.preventDefault();
+
+  const formData = new FormData(e.target);
+  const loading = document.querySelector(".email-loading");
+  const summaryEl = document.getElementById("summary");
+
+  loading.style.display = "block";
+  summaryEl.innerText = "";
+
+  try {
+    const res = await fetch("/summarize", {
+      method: "POST",
+      body: formData
+    });
+
+    if (!res.ok) {
+      throw new Error(`Server error: ${res.status}`);
+    }
+
+    const data = await res.json();
+    summaryEl.innerText = data.summary;
+  } catch (err) {
+    summaryEl.innerText = `Error: ${err.message}`;
+  } finally {
+    loading.style.display = "none";
+  }
+};
+    </script>
+</body>
+</html>
